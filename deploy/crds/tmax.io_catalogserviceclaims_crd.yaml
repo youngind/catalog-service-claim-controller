@@ -1,0 +1,147 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: catalogserviceclaims.tmax.io
+spec:
+  additionalPrinterColumns:
+  - JSONPath: .status.status
+    name: Status
+    type: string
+  - JSONPath: .status.reason
+    name: Reason
+    type: string
+  group: tmax.io
+  names:
+    kind: CatalogServiceClaim
+    listKind: CatalogServiceClaimList
+    plural: catalogserviceclaims
+    shortNames:
+    - csc
+    singular: catalogserviceclaim
+  scope: Namespaced
+  subresources: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        labels:
+          properties:
+            additionalProperties:
+              type: string
+          type: object
+        metadata:
+          properties:
+            generateName:
+              type: string
+            name:
+              type: string
+          type: object
+        operatorStartTime:
+          type: string
+        spec:
+          properties:
+            apiVersion:
+              type: string
+            imageUrl:
+              type: string
+            kind:
+              type: string
+            labels:
+              properties:
+                additionalProperties:
+                  type: string
+              type: object
+            longDescription:
+              type: string
+            markdownDescription:
+              type: string
+            metadata:
+              properties:
+                generateName:
+                  type: string
+                name:
+                  type: string
+              type: object
+            objects:
+              items:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              type: array
+            parameters:
+              items:
+                properties:
+                  description:
+                    type: string
+                  displayName:
+                    type: string
+                  from:
+                    type: string
+                  generate:
+                    type: string
+                  name:
+                    type: string
+                  required:
+                    type: boolean
+                  value:
+                    type: string
+                  valueType:
+                    type: string
+                required:
+                - name
+                type: object
+              type: array
+            plans:
+              items:
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              type: array
+            provider:
+              type: string
+            recommend:
+              type: boolean
+            shortDescription:
+              type: string
+            tags:
+              items:
+                type: string
+              type: array
+            urlDescription:
+              type: string
+          required:
+          - apiVersion
+          - kind
+          - metadata
+          - objects
+          - parameters
+          type: object
+        status:
+          properties:
+            lastTransitionTime:
+              format: date-time
+              type: string
+            message:
+              type: string
+            reason:
+              type: string
+            status:
+              enum:
+              - Awaiting
+              - Success
+              - Reject
+              - Error
+              type: string
+          type: object
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+      type: object
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
