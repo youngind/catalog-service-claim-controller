@@ -1,0 +1,162 @@
+Name:         nginx-catalog-service-claim
+Namespace:    default
+Labels:       <none>
+Annotations:  API Version:  tmax.io/v1alpha1
+Kind:         CatalogServiceClaim
+Labels:
+Metadata:
+  Creation Timestamp:  2020-07-28T09:35:28Z
+  Generation:          5
+  Managed Fields:
+    API Version:  tmax.io/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:labels:
+      f:spec:
+        f:labels:
+        f:objects:
+        f:plans:
+      f:status:
+    Manager:      catalog-service-claim-controller-local
+    Operation:    Update
+    Time:         2020-07-29T07:04:02Z
+    API Version:  tmax.io/v1alpha1
+    Fields Type:  FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .:
+          f:kubectl.kubernetes.io/last-applied-configuration:
+      f:spec:
+        .:
+        f:apiVersion:
+        f:imageUrl:
+        f:kind:
+        f:metadata:
+        f:parameters:
+        f:provider:
+        f:recommend:
+        f:tags:
+        f:urlDescription:
+      f:status:
+        f:status:
+    Manager:         kubectl
+    Operation:       Update
+    Time:            2020-07-29T07:42:21Z
+  Resource Version:  2346159
+  Self Link:         /apis/tmax.io/v1alpha1/namespaces/default/catalogserviceclaims/nginx-catalog-service-claim
+  UID:               c76fece7-4855-4851-8c5d-029c265cfa19
+Spec:
+  API Version:  tmax.io/v1
+  Image URL:    example.com/example.gif
+  Kind:         Template
+  Labels:
+  Metadata:
+    Name:       nginx-template
+    Namespace:  default
+  Objects:
+    API Version:  apps/v1
+    Kind:         Deployment
+    Metadata:
+      Labels:
+        App:  ${NAME}
+      Name:   ${NAME}
+    Spec:
+      Selector:
+        Match Labels:
+          App:  ${NAME}
+      Template:
+        Metadata:
+          Labels:
+            App:  ${NAME}
+        Spec:
+          Containers:
+            Image:  ${IMAGE}
+            Name:   ${NAME}
+            Ports:
+              Container Port:  80
+              Name:            http
+            Resources:
+              Requests:
+                Cpu:  1
+          Tolerations:
+            Effect:              NoExecute
+            Key:                 node.kubernetes.io/not-ready
+            Toleration Seconds:  10
+            Effect:              NoExecute
+            Key:                 node.kubernetes.io/unreachable
+            Toleration Seconds:  10
+    API Version:                 v1
+    Kind:                        Service
+    Metadata:
+      Name:  ${NAME}
+    Spec:
+      Ports:
+        Name:         http
+        Port:         81
+        Protocol:     TCP
+        Target Port:  80
+      Selector:
+        App:      ${NAME}
+      Type:       LoadBalancer
+    API Version:  v1
+    Data:
+      Host:  ZHVtbXk=
+    Kind:    Secret
+    Metadata:
+      Name:  ${NAME}
+  Parameters:
+    Description:  Application name
+    Name:         NAME
+    Value:        nginx
+    Value Type:   string
+    Description:  Application Docker Image
+    Name:         IMAGE
+    Value:        nginx
+    Value Type:   string
+  Plans:
+    Bindable:     true
+    Description:  example
+    Free:         false
+    Metadata:
+      Bullets:
+        feat 1
+        feat 2
+      Costs:
+        Amount:       200
+        Unit:         $
+    Name:             example-plan1
+    plan_updateable:  false
+    Schemas:
+      service_instance:
+        Create:
+          Parameters:
+            IMAGE:  nginx:1
+            NAME:   nginx1
+    Bindable:       true
+    Description:    example
+    Free:           false
+    Metadata:
+      Bullets:
+        feat 1
+        feat 2
+      Costs:
+        Amount:       200
+        Unit:         $
+    Name:             example-plan2
+    plan_updateable:  false
+    Schemas:
+      service_instance:
+        Create:
+          Parameters:
+            IMAGE:  nginx:1
+            NAME:   nginx2
+  Provider:         tmax
+  Recommend:        true
+  Tags:
+    nginx
+  URL Description:  http://url.example.com
+Status:
+  Reason:  wait for admin permission
+  Status:  Awaiting
+Events:    <none>

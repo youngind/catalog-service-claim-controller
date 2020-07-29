@@ -3,25 +3,19 @@ kind: CustomResourceDefinition
 metadata:
   name: catalogserviceclaims.tmax.io
 spec:
-  additionalPrinterColumns:
-  - JSONPath: .status.status
-    name: Status
-    type: string
-  - JSONPath: .status.reason
-    name: Reason
-    type: string
   group: tmax.io
   names:
     kind: CatalogServiceClaim
     listKind: CatalogServiceClaimList
     plural: catalogserviceclaims
-    shortNames:
-    - csc
     singular: catalogserviceclaim
   scope: Namespaced
-  subresources: {}
+  subresources:
+    status: {}
   validation:
     openAPIV3Schema:
+      description: CatalogServiceClaim is the Schema for the catalogserviceclaims
+        API
       properties:
         apiVersion:
           type: string
@@ -33,11 +27,6 @@ spec:
               type: string
           type: object
         metadata:
-          properties:
-            generateName:
-              type: string
-            name:
-              type: string
           type: object
         operatorStartTime:
           type: string

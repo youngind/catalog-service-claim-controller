@@ -56,7 +56,7 @@ type LabelsSpec struct {
 
 type MetadataSpec struct {
 	GenerateName string `json:"generateName,omitempty"`
-	name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -64,11 +64,6 @@ type MetadataSpec struct {
 // CatalogServiceClaim is the Schema for the catalogserviceclaims API
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:path=catalogserviceclaims,scope=Namespaced
-
-// +kubebuilder:resource:shortName="csc"
-
-// +kubebuilder:printcolumn:name="Status",type=string,JSONPath=`.status.status`
-// +kubebuilder:printcolumn:name="Reason",type=string,JSONPath=`.status.reason`
 type CatalogServiceClaim struct {
 
 	metav1.TypeMeta   `json:",inline"`
@@ -78,7 +73,6 @@ type CatalogServiceClaim struct {
 	ApiVersion	string	`json:"apiVersion"`
 	Kind	string `json:"kind"`
 	Labels	LabelsSpec `json:"labels,omitempty"`
-	Metadata MetadataSpec `json:"metadata,omiteympty"`
 
 	Spec   CatalogServiceClaimSpec   `json:"spec"`
 	Status CatalogServiceClaimStatus `json:"status,omitempty"`
