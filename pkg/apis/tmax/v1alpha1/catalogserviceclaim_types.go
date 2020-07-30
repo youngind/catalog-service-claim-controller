@@ -37,6 +37,7 @@ type CatalogServiceClaimStatus struct {
 
 // +kubebuilder:validation:XPreserveUnknownFields
 type ObjectsSpec struct {
+	Fields metav1.FieldsV1 `json:"fields,omitempty"`
 }
 
 type ParamsSpec struct {

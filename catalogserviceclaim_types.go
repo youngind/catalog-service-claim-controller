@@ -23,7 +23,7 @@ type CatalogServiceClaimSpec struct {
 	Metadata MetadataSpec `json:"metadata"`
 	Objects []ObjectsSpec `json:"objects"`
 	Plans []ObjectsSpec `json:"plans,omitempty"`
-	Params []ParamsSpec `json:"parameters"`
+	Parameters []ParamSpec `json:"parameters"`
 }
 
 type CatalogServiceClaimStatus struct {
@@ -39,7 +39,7 @@ type CatalogServiceClaimStatus struct {
 type ObjectsSpec struct {
 }
 
-type ParamsSpec struct {
+type ParamSpec struct {
 	Description string `json:"description,omitempty"`
 	DisplayName string `json:"displayName,omitempty"`
 	From string `json:"from,omitempty"`

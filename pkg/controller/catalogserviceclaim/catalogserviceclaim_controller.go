@@ -106,17 +106,17 @@ func (r *ReconcileCatalogServiceClaim) Reconcile(request reconcile.Request) (rec
 	}
 
 	Event := request.Event
-	// claimName := request.Name
-	// claimNamespace := request.Namespace
+	claimName := request.Name
+	claimNamespace := request.Namespace
 	resourceName := instance.Spec.Metadata.Name
 	catalogNamespace := "default"
 
 	switch Event {
-		case "Create":  // case 1: wait for admin permission -> pathStatus ( Event == Create)		
+		case "Create":  // case 1: wait for admin permission -> pathStatus ( Event == Create)	
 			instance.Status.Status = "Awaiting"
 			instance.Status.Reason = "wait for admin permission"
 
-			reqLogger.Info(Event + " : " + status)
+			reqLogger.Info(Event)
 
 			if err = r.client.Status().Update(context.TODO(), instance); err != nil {
 				return reconcile.Result{}, err
@@ -127,7 +127,7 @@ func (r *ReconcileCatalogServiceClaim) Reconcile(request reconcile.Request) (rec
 
 			if status == "Success" && templateAlreadyExist(resourceName,catalogNamespace){
 			// case 2: approved by admin and template update -> patchStatus ( Event == Update && template cr != null)
-				reqLogger.Info(Event + " : " +status)
+				reqLogger.Info(Event + " : " + "template update success.")
 				instance.Status.Status = "Success"
 				instance.Status.Reason = "template update success."
 
@@ -136,9 +136,12 @@ func (r *ReconcileCatalogServiceClaim) Reconcile(request reconcile.Request) (rec
 				}
 			} else if status == "Success" && !templateAlreadyExist(resourceName,catalogNamespace){
 			// case 3: approved by admin and template create -> createCustomObject & patchStatus ( Event == Update && template cr = null)	
+				reqLogger.Info(Event + " : " +"template create success.")
+				err := createTemplate(instance,claimName,claimNamespace)
 
-
-
+				if err != nil {
+					panic("===[ Template Create Error ] : " + err.Error())
+				}
 				instance.Status.Status = "Success"
 				instance.Status.Reason = "template create success."
 
@@ -171,4 +174,23 @@ func templateAlreadyExist(name string, namespace string) bool {
 	return true
 }
 
-func createTemplate()
+func createTemplate(claim *tmaxv1alpha1.CatalogServiceClaim, name string, namespace string) error {
+	
+	c, err := config.LoadKubeConfig()
+	if err != nil {
+		panic("===[ Error ] : " + err.Error())
+	}
+	clientset := crdapi.NewAPIClient(c)
+
+	var bodyObj interface{}
+	bodyObj = claim.Spec
+
+	response, _, err := clientset.CustomObjectsApi.CreateNamespacedCustomObject(context.Background(), "tmax.io", "v1", namespace, "templates", bodyObj, nil)
+
+	if err != nil && response == nil {
+		if errors.IsNotFound(err) {
+			return err
+		}
+	}
+	return nil
+}
